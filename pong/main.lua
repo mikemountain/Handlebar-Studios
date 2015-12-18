@@ -44,59 +44,62 @@ function love.load()
 end
 
 function love.update(dt)
-    if pellet.y < 0 or pellet.y > WindowHeight then
-        -- end game
-        if pellet.y < 0 then
-            score = 1
-        else
-            score = -1
+    if isAlive == 1 then
+        if pellet.y < 0 or pellet.y > WindowHeight then
+            -- end game
+            if pellet.y < 0 then
+                p1.score = p1.score + 1
+            else
+                p2.score = p2.score + 1
+            end
+            pellet.x = WindowWidth
+            pellet.y = WindowHeight / 2
+            isAlive = 0
+            pellet.speed = 0
+            p2.x = WindowWidth / 2 - p2.width / 2
+            p2.y = 0
         end
-        pellet.y = 0 - pellet.height
-        isAlive = 0
-        pellet.speed = 0
-        p2.x = WindowWidth / 2 - p2.width / 2
-        p2.y = 0
-    end
 
-    pellet.y = pellet.y + pellet.speed * dt * pellet.yDir
-    pellet.x = pellet.x + pellet.speed * dt * pellet.xDir
+        pellet.y = pellet.y + pellet.speed * dt * pellet.yDir
+        pellet.x = pellet.x + pellet.speed * dt * pellet.xDir
 
-    if pellet.x <= 0 then
-        pellet.xDir = -pellet.xDir
-        pellet.speed = pellet.speed + 25
-    elseif pellet.x + pellet.width >= WindowWidth - pellet.width then
-        pellet.xDir = -pellet.xDir
-        pellet.speed = pellet.speed + 25
-    end
-
-    if CheckCollision(pellet.x, pellet.y, pellet.width, pellet.height, p1.x, p1.y, p1.width, p1.height) then
-        -- pellet.xDir = -pellet.xDir
-        pellet.yDir = -pellet.yDir
-        pellet.speed = pellet.speed + 25
-    elseif CheckCollision(pellet.x, pellet.y, pellet.width, pellet.height, p2.x, p2.y, p2.width, p2.height) then
-        -- pellet.xDir = -pellet.xDir
-        pellet.yDir = -pellet.yDir
-        pellet.speed = pellet.speed + 25
-    end
-
-
-    if love.keyboard.isDown("left") then
-        if p1.x > 0 then
-            p1.x = p1.x - p1.speed*dt
+        if pellet.x <= 0 then
+            pellet.xDir = -pellet.xDir
+            pellet.speed = pellet.speed + 25
+        elseif pellet.x + pellet.width >= WindowWidth - pellet.width then
+            pellet.xDir = -pellet.xDir
+            pellet.speed = pellet.speed + 25
         end
-    elseif love.keyboard.isDown("right") then
-        if p1.x + p1.width < WindowWidth then
-            p1.x = p1.x + p1.speed*dt
-        end
-    end
 
-    if pellet.x + pellet.width / 2 <= p2.x + p2.width / 2 then
-        if p2.x > 0 then
-            p2.x = p2.x - p2.speed * dt
+        if CheckCollision(pellet.x, pellet.y, pellet.width, pellet.height, p1.x, p1.y, p1.width, p1.height) then
+            -- pellet.xDir = -pellet.xDir
+            pellet.yDir = -pellet.yDir
+            pellet.speed = pellet.speed + 25
+        elseif CheckCollision(pellet.x, pellet.y, pellet.width, pellet.height, p2.x, p2.y, p2.width, p2.height) then
+            -- pellet.xDir = -pellet.xDir
+            pellet.yDir = -pellet.yDir
+            pellet.speed = pellet.speed + 25
         end
-    elseif pellet.x + pellet.width / 2 >= p2.x + p2.width / 2 then
-        if p2.x + p2.width <= WindowWidth then
-            p2.x = p2.x + p2.speed * dt
+
+
+        if love.keyboard.isDown("left") then
+            if p1.x > 0 then
+                p1.x = p1.x - p1.speed*dt
+            end
+        elseif love.keyboard.isDown("right") then
+            if p1.x + p1.width < WindowWidth then
+                p1.x = p1.x + p1.speed*dt
+            end
+        end
+
+        if pellet.x + pellet.width / 2 <= p2.x + p2.width / 2 then
+            if p2.x > 0 then
+                p2.x = p2.x - p2.speed * dt
+            end
+        elseif pellet.x + pellet.width / 2 >= p2.x + p2.width / 2 then
+            if p2.x + p2.width <= WindowWidth then
+                p2.x = p2.x + p2.speed * dt
+            end
         end
     end
 
@@ -153,8 +156,8 @@ function love.draw()
     love.graphics.rectangle("fill", pellet.x, pellet.y, pellet.width, pellet.height)
 
     if isAlive == 0 then
-        love.graphics.setFont(mainFont);
-        line = "Press 'R' to restart" --\nPlayer score: " .. p1.score .. "\nComputer score: " .. p2.score
+        love.graphics.setFont(mainFont)
+        line = "Press 'R' to restart\nPlayer score: " .. p1.score .. "\nComputer score: " .. p2.score
         lw = mainFont:getWidth(line)
         lh = mainFont:getHeight(line)
         love.graphics.setColor(255,255,255,255)
