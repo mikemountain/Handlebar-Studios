@@ -18,6 +18,8 @@ function love.load()
     powerup.player = ""
     powerup.next = {}
 
+    -- maybe store powerup info in the player
+    -- have a map that can store multiple powerups, key is power and value is remaining time?
     p1 = {} -- new table for the p1
     p1.x = WindowWidth / 2    -- x,y coordinates of the p1
     p1.y = WindowHeight - 10
